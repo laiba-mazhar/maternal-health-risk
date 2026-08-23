@@ -38,8 +38,25 @@ SHOTS = [
     ("ui-high-risk.png", "?case=high-glucose&show=1", (1180, 2950)),
     ("ui-low-risk.png", "?case=routine&show=1", (1180, 2650)),
     ("ui-raised-bp.png", "?case=raised-bp&show=1", (1180, 2950)),
-    ("ui-mobile.png", "?case=high-glucose&show=1", (414, 3400)),
+    # Kept to roughly a phone's worth of screen. A 1:5 strip is technically the
+    # whole page but reads as a sliver at any width a README can give it.
+    ("ui-mobile.png", "?case=high-glucose&show=1", (414, 1180)),
 ]
+
+# Tight crops of just the result card, for showing the three bands side by side.
+#
+# Full-page shots cannot sit next to each other in a documentation table: they
+# differ in height by hundreds of pixels, the row stretches to the tallest, and
+# every shorter cell gets padded with blank space. Cropping to the same region
+# of each page -- and then to one shared height -- makes them directly
+# comparable, which is also the only way the bands read as a set.
+BAND_CROPS = [
+    ("band-low.png", "?case=routine&show=1"),
+    ("band-mid.png", "?case=raised-bp&show=1"),
+    ("band-high.png", "?case=high-glucose&show=1"),
+]
+CROP_VIEWPORT = (820, 2400)
+CROP_PAD = 18
 
 # Streamlit hydrates its widgets after the first paint, so a screenshot taken on
 # ``load`` catches labelled boxes with no labels in them. Wait until the inputs
@@ -94,6 +111,63 @@ def wait_for(port: int, timeout: float = 90.0) -> bool:
                 return True
         time.sleep(0.5)
     return False
+
+
+def capture_band_crops(browser, port: int) -> None:
+    """Crop each band's result card to one shared rectangle.
+
+    Two passes: the first measures where the card sits on every page, the second
+    shoots them all at the same height. Equal dimensions are the whole point --
+    unequal ones are what produced the blank left column this replaces.
+    """
+    w, h = CROP_VIEWPORT
+    pages, boxes = [], []
+
+    for name, suffix in BAND_CROPS:
+        page = browser.new_page(viewport={"width": w, "height": h},
+                                device_scale_factor=2)
+        page.goto(f"http://127.0.0.1:{port}/{suffix}", wait_until="load")
+        try:
+            page.wait_for_function(READY_JS, timeout=60_000)
+            page.wait_for_selector(".vitals .chip", timeout=30_000)
+        except Exception:  # noqa: BLE001
+            print(f"  ! {name}: result card never appeared")
+        wait_until_settled(page)
+        try:
+            page.evaluate("() => document.fonts.ready")
+        except Exception:  # noqa: BLE001
+            pass
+        page.wait_for_timeout(1200)
+
+        hero = page.locator(".hero").bounding_box()
+        note = page.locator(".vitals-note").bounding_box()
+        pages.append((name, page))
+        boxes.append((hero, note))
+
+    usable = [(hero, note) for hero, note in boxes if hero and note]
+    if not usable:
+        print("  ! no band crops could be measured")
+        for _, page in pages:
+            page.close()
+        return
+
+    # One height for all three, so the row cannot stretch.
+    height = max((note["y"] + note["height"]) - hero["y"] for hero, note in usable)
+    height = round(height + CROP_PAD * 2)
+
+    for (name, page), (hero, note) in zip(pages, boxes):
+        if not hero:
+            page.close()
+            continue
+        clip = {
+            "x": max(0.0, hero["x"] - CROP_PAD),
+            "y": max(0.0, hero["y"] - CROP_PAD),
+            "width": min(hero["width"] + CROP_PAD * 2, w - hero["x"] + CROP_PAD),
+            "height": min(float(height), h - hero["y"] + CROP_PAD),
+        }
+        page.screenshot(path=str(OUT / name), clip=clip)
+        print(f"  {name}  (crop {round(clip['width'])}x{round(clip['height'])})")
+        page.close()
 
 
 def main() -> int:
@@ -175,6 +249,8 @@ def main() -> int:
                 page.screenshot(path=str(path))
                 print(f"  {name}  ({w}x{h})  values={values}")
                 page.close()
+
+            capture_band_crops(browser, port)
             browser.close()
     finally:
         if not args.keep_open:
@@ -185,7 +261,7 @@ def main() -> int:
                 server.kill()
             print("streamlit stopped")
 
-    print(f"\nWrote {len(SHOTS)} screenshots to {OUT}")
+    print(f"\nWrote {len(SHOTS) + len(BAND_CROPS)} screenshots to {OUT}")
     return 0
 
 

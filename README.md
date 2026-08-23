@@ -118,24 +118,44 @@ streamlit run app/streamlit_app.py     # the health-worker interface
 
 Built for the actual setting: an entry-level Android handset, in a clinic, held by someone who has about twenty seconds.
 
-<table>
-<tr>
-<td width="50%" align="center"><b>Input — bilingual, unit-labelled</b></td>
-<td width="50%" align="center"><b>High risk — full result</b></td>
-</tr>
-<tr>
-<td><img src="docs/img/ui-form.png" alt="Bilingual measurement form with example-case presets"/></td>
-<td><img src="docs/img/ui-high-risk.png" alt="High-risk result with Urdu message, driver bars and cited guideline criteria"/></td>
-</tr>
-<tr>
-<td width="50%" align="center"><b>Low risk — deliberately quieter</b></td>
-<td width="50%" align="center"><b>Mobile (414px)</b></td>
-</tr>
-<tr>
-<td><img src="docs/img/ui-low-risk.png" alt="Low-risk result, which withholds driver phrases"/></td>
-<td align="center"><img src="docs/img/ui-mobile.png" width="290" alt="Mobile layout"/></td>
-</tr>
-</table>
+### Three bands, three registers
+
+The band, its Urdu name, how soon to act, and the exact measurements it was scored from — with anything crossing a guideline threshold highlighted.
+
+<img src="docs/img/band-low.png" alt="Low risk: green band reading کم خطرہ, timeframe 'at the usual scheduled time', no measurement flagged"/>
+
+<img src="docs/img/band-mid.png" alt="Medium risk: amber band reading درمیانہ خطرہ, timeframe 'within the next few days', blood pressure 146/94 flagged"/>
+
+<img src="docs/img/band-high.png" alt="High risk: red band reading زیادہ توجہ درکار, timeframe 'today, or tomorrow morning', age, blood pressure and glucose all flagged"/>
+
+Note what the colours and the timeframes do: urgency is carried by **when to go**, never by frightening adjectives. The high band reads *"needs closer attention"*, not *"danger"*.
+
+### Entering measurements
+
+<img src="docs/img/ui-form.png" alt="Bilingual measurement form with example-case presets"/>
+
+### On a phone
+
+The intended user has an entry-level Android handset, so the 414px layout is the primary one rather than a courtesy.
+
+<div align="center">
+<img src="docs/img/ui-mobile.png" width="300" alt="Mobile layout at 414px showing the form and the high-risk result"/>
+</div>
+
+<details>
+<summary><b>Full-page screenshots</b> — the complete screen for each band</summary>
+
+<br>
+
+**High risk** — full result, including driver bars and every cited criterion:
+
+<img src="docs/img/ui-high-risk.png" alt="Complete high-risk screen"/>
+
+**Low risk** — deliberately quieter; note it lists no drivers at all:
+
+<img src="docs/img/ui-low-risk.png" alt="Complete low-risk screen"/>
+
+</details>
 
 **Design decisions that came from the setting, not from Streamlit:**
 
@@ -322,9 +342,13 @@ TreeSHAP on random forest and XGBoost produces **the same ordering**. Agreement 
 
 <br>
 
-| Class distribution | Vitals by risk label |
-|---|---|
-| <img src="docs/img/fig1_class_distribution.png"/> | <img src="docs/img/fig2_vitals_by_class.png"/> |
+**Class distribution** — the class we least want to miss is the smallest:
+
+<img src="docs/img/fig1_class_distribution.png" width="520" alt="Bar chart of the low/mid/high risk label counts"/>
+
+**Vitals by risk label** — glucose and blood pressure separate the classes; temperature barely does:
+
+<img src="docs/img/fig2_vitals_by_class.png" width="720" alt="Box plots of each vital, split by risk label"/>
 
 **Threshold stability across folds** — a threshold that swings fold to fold is not one to deploy. We report the spread rather than an averaged point estimate.
 
