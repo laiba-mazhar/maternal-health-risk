@@ -21,3 +21,13 @@ data/raw/*
 
 # Local editor/tooling config
 .claude/
+
+# LaTeX build products (main.pdf is committed deliberately)
+paper/ieee/*.aux
+paper/ieee/*.bbl
+paper/ieee/*.blg
+paper/ieee/*.log
+paper/ieee/*.out
+paper/ieee/*.fls
+paper/ieee/*.fdb_latexmk
+paper/ieee/*.synctex.gz
