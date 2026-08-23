@@ -4,7 +4,10 @@
 
 ### Safety-first modelling, guideline calibration, and Urdu risk communication
 
-**A maternal-risk screening prototype that asks a different question than the literature does — not "how accurate is the model?" but "does it change the referral decision, and can a Lady Health Worker actually say it out loud?"**
+**An R&D project asking a different question than the literature does — not "how accurate is the model?" but "does it change the referral decision, and can a Lady Health Worker actually say it out loud?"**
+
+[![R&D Project](https://img.shields.io/badge/R%26D-Research%20Project-0b5563?style=for-the-badge)](#-rd-project-scope)
+[![IEEE Paper](https://img.shields.io/badge/IEEE-manuscript%20(9%20pp)-00629B?style=for-the-badge&logo=ieee&logoColor=white)](paper/ieee/main.pdf)
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.7-F7931E?logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
@@ -84,6 +87,74 @@ Classification on the [UCI Maternal Health Risk dataset](https://archive.ics.uci
 <td><a href="src/mhrisk/localization.py"><code>localization.py</code></a><br>hand-authored Urdu + CI lint rules</td>
 </tr>
 </table>
+
+---
+
+## 🔬 R&D project scope
+
+This is a **research and development project**, not a product and not a deployment. It exists to answer research questions and to produce a reusable method, and it is scoped and reported accordingly.
+
+<table>
+<tr><th width="34%">Research question</th><th>Status</th></tr>
+<tr>
+<td><b>RQ1.</b> Does a learned model add anything over documented clinical thresholds, once operational cost is held equal?</td>
+<td>✅ <b>Answered — negatively.</b> No learned model beat 11 published criteria on high-risk recall at matched referral load. What the models buy is a different error profile, not a better one.</td>
+</tr>
+<tr>
+<td><b>RQ2.</b> Do this dataset's labels agree with the clinical guidance a Pakistani clinic would apply?</td>
+<td>✅ <b>Measured.</b> 64.0% agreement, quadratic κ 0.696, with structured disagreement — the guidelines are systematically stricter on ambiguous mid cases.</td>
+</tr>
+<tr>
+<td><b>RQ3.</b> How much does an undocumented measurement assumption move the result?</td>
+<td>✅ <b>Quantified.</b> More than any modelling choice available: 64% → 31% agreement on one column's interpretation.</td>
+</tr>
+<tr>
+<td><b>RQ4.</b> Can message safety be made a testable property rather than a review activity?</td>
+<td>✅ <b>Demonstrated.</b> Three commitments enforced as CI lint, with adversarial tests proving the linter has teeth.</td>
+</tr>
+<tr>
+<td><b>RQ5.</b> Does any of this transfer to Pakistani clinical practice?</td>
+<td>❌ <b>Open.</b> The calibration study <i>measures</i> the transfer gap. Closing it requires Pakistani data and is out of scope here.</td>
+</tr>
+</table>
+
+**What is deliberately *not* claimed:** clinical validity, regulatory standing, or readiness for use with any patient. Results run on a synthetic stand-in and every artifact says so. The Urdu is unreviewed. This is R&D output — a method, a measurement, and a negative result — offered for scrutiny and reuse, not for deployment.
+
+---
+
+## 📄 Research output
+
+<table>
+<tr>
+<td width="58%" valign="top">
+
+### IEEE journal manuscript
+
+**[`paper/ieee/main.pdf`](paper/ieee/main.pdf)** — compiled, 9 pages, 26 references.
+
+Formatted with `IEEEtran` in journal (two-column) mode, written for **IEEE Journal of Biomedical and Health Informatics**. Builds clean with `latexmk -pdf main.tex`: zero undefined citations or cross-references.
+
+- 📘 [`main.tex`](paper/ieee/main.tex) — LaTeX source
+- 📚 [`references.bib`](paper/ieee/references.bib) — 26 entries
+- 🛠️ [`paper/ieee/README.md`](paper/ieee/README.md) — build instructions and the pre-submission checklist
+
+</td>
+<td width="42%" valign="top">
+
+### Long-form manuscript
+
+**[`paper/paper.md`](paper/paper.md)** — the discursive working version: 10 sections, fuller related-work treatment and gap analysis.
+
+**[`paper/generated_tables.md`](paper/generated_tables.md)** — every table regenerated from `artifacts/` by script, so no figure in either manuscript is transcribed by hand.
+
+</td>
+</tr>
+</table>
+
+> [!IMPORTANT]
+> **Not submission-ready yet.** Three blocking items, all listed in [`paper/ieee/README.md`](paper/ieee/README.md): the affiliation is a visible placeholder, the bibliography fields need verifying against DOIs, and every number needs regenerating on the real dataset. Section VI-C — the negative headline result — is the claim most likely to reverse.
+>
+> Note also that pdfLaTeX cannot typeset Urdu script, so the Urdu deliverable appears in the paper through the interface figure and English glosses rather than inline. The build README documents the XeLaTeX route.
 
 ---
 
@@ -419,7 +490,8 @@ scripts/              download_data · train · predict · make_figures
                       make_paper_tables · make_screenshots
 tests/                155 tests, including the message-safety lint gate
 docs/                 UNITS.md · ETHICS.md · KNOWN_ISSUES.md · img/
-paper/                manuscript + generated tables + references
+paper/                paper.md (long form) · generated_tables.md
+└── ieee/             IEEE journal manuscript: main.tex, main.pdf, references.bib
 data/                 DATA_CARD.md · bundled synthetic CSV · raw/ (gitignored)
 ```
 
@@ -431,7 +503,9 @@ data/                 DATA_CARD.md · bundled synthetic CSV · raw/ (gitignored)
 | [`docs/ETHICS.md`](docs/ETHICS.md) | What this is not · the failure that matters · message design · review status |
 | [`docs/KNOWN_ISSUES.md`](docs/KNOWN_ISSUES.md) | Real bugs found and fixed, including two SHAP traps |
 | [`data/DATA_CARD.md`](data/DATA_CARD.md) | Both datasets, and exactly how the synthetic one is built |
-| [`paper/paper.md`](paper/paper.md) | The full manuscript |
+| [`paper/ieee/main.pdf`](paper/ieee/main.pdf) | **IEEE journal manuscript** — 9 pages, two-column, compiled |
+| [`paper/paper.md`](paper/paper.md) | Long-form working manuscript, 10 sections |
+| [`paper/ieee/README.md`](paper/ieee/README.md) | LaTeX build instructions and the pre-submission checklist |
 
 ---
 
@@ -485,6 +559,8 @@ Single seed (`20260822`) through generation, splits, and every model. Each run w
 
 Released under the [MIT licence](LICENSE), with an additional not-a-medical-device notice.
 
+Cite the software:
+
 ```bibtex
 @software{mazhar2026maternal,
   author = {Mazhar, Laiba},
@@ -492,6 +568,21 @@ Released under the [MIT licence](LICENSE), with an additional not-a-medical-devi
             Guideline Calibration, and Urdu Risk Communication},
   year   = {2026},
   url    = {https://github.com/laiba-mazhar/maternal-health-risk}
+}
+```
+
+Or the manuscript (unpublished R&D report — update once it has a venue):
+
+```bibtex
+@unpublished{mazhar2026safetyfirst,
+  author = {Mazhar, Laiba},
+  title  = {Safety-First Maternal Risk Screening: Documented Clinical
+            Thresholds as a Baseline, Label-Transfer Calibration, and
+            Urdu Risk Communication as a Deliverable},
+  year   = {2026},
+  note   = {R\&D manuscript, IEEE format. Results computed on a synthetic
+            stand-in dataset},
+  url    = {https://github.com/laiba-mazhar/maternal-health-risk/blob/main/paper/ieee/main.pdf}
 }
 ```
 
