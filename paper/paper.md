@@ -383,7 +383,7 @@ rule set without reading code:
 * **Tachycardia**: resting heart rate > 100 bpm (moderate).
 * **Maternal age**: < 18 or ≥ 35 years (moderate).
 
-Escalation is deliberately simple enough to defend in a viva: any severe feature
+Escalation is deliberately simple enough to defend to a clinician: any severe feature
 → high risk; two or more moderate features → high risk; exactly one → mid risk;
 none → low risk.
 

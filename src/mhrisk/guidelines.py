@@ -136,7 +136,7 @@ def guideline_predict(
 ) -> tuple[np.ndarray, pd.DataFrame]:
     """Assign a risk band from guideline criteria alone.
 
-    Escalation logic, deliberately simple enough to defend in a viva:
+    Escalation logic, deliberately simple enough to defend to a clinician:
 
     * any **severe** feature                      -> high risk
     * two or more **moderate** features           -> high risk
