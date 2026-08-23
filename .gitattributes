@@ -1,0 +1,7 @@
+# Normalise line endings so the repo is identical on Windows, macOS and Linux.
+* text=auto eol=lf
+
+# Binary assets: never touch, never diff as text.
+*.png  binary
+*.svg  text eol=lf
+*.joblib binary

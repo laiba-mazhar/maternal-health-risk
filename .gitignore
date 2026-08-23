@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Generated results. Reproduce with: python scripts/train.py
+artifacts/*
+!artifacts/.gitkeep
+
+# The real dataset is downloaded, not vendored.
+data/raw/*
+!data/raw/.gitkeep
+
+# The synthetic stand-in IS committed: it makes the repo runnable offline
+# and keeps demonstration results reproducible.
+!data/bundled/*.csv
+
+# pytest cache
+.pytest_cache/
+
+# Local editor/tooling config
+.claude/

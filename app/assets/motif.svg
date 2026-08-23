@@ -1,0 +1,18 @@
+<svg viewBox="0 0 640 640" width="640" height="640" xmlns="http://www.w3.org/2000/svg">
+  <title>Care motif</title>
+  <desc>Nested open arcs enclosing a small circle, with a sprig above: something held, and something growing. Non-figurative.</desc>
+  <g fill="none" stroke="#1f6f8b" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 96 486 A 224 224 0 1 1 544 486" stroke-width="20" opacity="0.55"/>
+    <path d="M 150 498 A 170 170 0 1 1 490 498" stroke-width="13" opacity="0.40"/>
+    <path d="M 204 508 A 116 116 0 1 1 436 508" stroke-width="8" opacity="0.26"/>
+    <circle cx="320" cy="372" r="52" stroke-width="11" opacity="0.50"/>
+    <path d="M 320 320 C 320 268 320 236 320 206" stroke-width="8" opacity="0.42"/>
+    <path d="M 320 250 C 296 238 282 216 280 190" stroke-width="7" opacity="0.34"/>
+    <path d="M 320 250 C 344 238 358 216 360 190" stroke-width="7" opacity="0.34"/>
+    <path d="M 128 300 L 96 288" stroke-width="6" opacity="0.20"/>
+    <path d="M 512 300 L 544 288" stroke-width="6" opacity="0.20"/>
+    <path d="M 168 196 L 146 174" stroke-width="6" opacity="0.16"/>
+    <path d="M 472 196 L 494 174" stroke-width="6" opacity="0.16"/>
+  </g>
+  <circle cx="320" cy="372" r="15" fill="#1f6f8b" opacity="0.30"/>
+</svg>
